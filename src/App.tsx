@@ -1,14 +1,32 @@
-import { useState } from 'react'
-import './App.css'
+import { createBrowserRouter } from "react-router-dom"
 
-function App() {
-  const [count, setCount] = useState(0)
+import { Home } from "./pages/home"
+import { LoginPage } from "./pages/auth/login"
+import { RegisterPage } from "./pages/auth/register"
+import { ErrorPage } from "./pages/error"
+import PrivateRoute from "./components/PrivateRoute"
 
-  return (
-    <>
-      <h1 className='bg-amber-400'>Hello world</h1>
-    </>
-  )
-}
+const router = createBrowserRouter([
+  {
+    element: (
+      <PrivateRoute>
+        <Home />
+      </PrivateRoute>
+    ),
+    path: '/',
+  },
+  {
+    element: <LoginPage />,
+    path: '/login',
+  },
+  {
+    element: <RegisterPage />,
+    path: '/register',
+  },
+  {
+    element: <ErrorPage />,
+    path: '*',
+  },
+]);
 
-export default App
+export { router }
