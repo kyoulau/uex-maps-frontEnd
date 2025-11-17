@@ -44,6 +44,13 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
       center={center}
       zoom={zoom}
     >
+      {/*
+        *
+        *  faz um loop na lista de 'contacts'
+        * e renderiza um <Marker> para cada um,
+        * usando a latitude e longitude do cotato.
+        *
+      */}
       {contacts.map((contact) => (
         <Marker
           key={contact.id}
