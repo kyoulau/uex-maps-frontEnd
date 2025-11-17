@@ -32,3 +32,12 @@ export interface JwtResponse {
   token: string;
   type: string;
 }
+
+export interface ViaCepResponse {
+  cep: string;
+  logradouro: string;
+  complemento: string;
+  bairro: string;
+  localidade: string; // O ViaCep 
+  uf: string;
+}
