@@ -6,10 +6,16 @@ import ContactFormModal from '../../components/contact/ContactFormModal';
 import ContactList from '../../components/ContactList';
 import MapDisplay from '../../components/MapDisplay';
 
+import { useNavigate } from 'react-router-dom';
+
 import { Box, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import {type Contato } from './../../types/types';
+
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteAccountModal from '../../components/DeleteAccountModal';
 
 
 interface PageableResponse<T> {
@@ -23,10 +29,13 @@ interface PageableResponse<T> {
 export function Home(){
 
   const [contacts, setContacts] = useState<Contato[]>([]);
+  const [editingContact, setEditingContact] = useState<Contato | null>(null);
+  
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedContact, setSelectedContact] = useState<Contato | null>(null);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingContact, setEditingContact] = useState<Contato | null>(null);
+  const navigate = useNavigate();
 
   const fetchContacts = async (filter: string = '') => {
     try {
@@ -74,6 +83,11 @@ export function Home(){
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('jwtToken');
+    navigate('/login');
+  };
+
   return(
     <Box sx={{ flexGrow: 1, p: 2, height: 'calc(100vh - 32px)' }}>
 
@@ -110,6 +124,24 @@ export function Home(){
             onEdit={handleOpenEditModal}  
             onDelete={handleDeleteContact}
           />
+          <Button
+              variant="outlined"
+              color="error"
+              onClick={handleLogout}
+              sx={{ minWidth: 'auto', px: 1 }}
+              title="Sair"
+            >
+              <LogoutIcon />
+            </Button>
+            <Button
+            variant="text"
+            color="error"
+            startIcon={<DeleteIcon />}
+            onClick={() => setIsDeleteModalOpen(true)}
+            sx={{ mt: 2, pt: 1, borderTop: '1px solid #eee' }} // Fica na parte de baixo
+          >
+            Excluir Minha Conta
+          </Button>
         </Box>
 
 
@@ -128,6 +160,10 @@ export function Home(){
         onClose={handleCloseModal}
         onSave={handleSaveSuccess}
         contactToEdit={editingContact}
+      />
+      <DeleteAccountModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
       />
     </Box>
   )
